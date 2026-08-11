@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>📈 Stock Predictor Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 30px;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: 600;
+    }
+
+    input, select, button {
+      padding: 8px 12px;
+      margin-right: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .chart-card, .info-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .info-card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+    }
+
+    .info-card p {
+      margin: 8px 0;
+      line-height: 1.6;
+    }
+
+    #pieChartContainer {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>📊 Stock Price Predictor Dashboard</h2>
+
+  <label for="dateInput">Select a future date:</label>
+  <input type="date" id="dateInput" min="">
+
+  <label for="stockSelect">Choose Stock:</label>
+  <select id="stockSelect">
+    <option value="AAPL">AAPL</option>
+    <option value="MSFT">MSFT</option>
+    <option value="TSLA">TSLA</option>
+    <option value="GOOGL">GOOGL</option>
+    <option value="AMZN">AMZN</option>
+    <option value="NFLX">NFLX</option>
+    <option value="DPZ">DPZ</option>
+  </select>
+
+  <button onclick="predictStockPrices()">Predict Prices</button>
+
+  <div class="dashboard">
+    <div class="chart-card">
+      <canvas id="priceChart"></canvas>
+      <div id="pieChartContainer">
+        <canvas id="pieChart" width="200"></canvas>
+      </div>
+    </div>
+
+    <div class="info-card" id="priceAnalysis">
+      <!-- Analysis here -->
+    </div>
+  </div>
+
+  <script>
+    window.onload = () => {
+      const today = new Date().toISOString().split("T")[0];
+      document.getElementById("dateInput").setAttribute("min", today);
+    };
+
+    let chart, pie;
+
+    function predictStockPrices() {
+      const date = document.getElementById("dateInput").value;
+      const stock = document.getElementById("stockSelect").value;
+
+      if (!date) {
+        alert("Please select a date.");
+        return;
+      }
+
+      fetch("http://localhost:5000/predict_stocks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ future_date: date })
+      })
+      .then(res => res.json())
+      .then(data => {
+        const p = data.predictions;
+        const s = stock;
+
+        const open = p[`${s}_Open`];
+        const close = p[`${s}_Close`];
+        const high = p[`${s}_High`];
+        const low = p[`${s}_Low`];
+        const vol = p[`${s}_Volatility`];
+        const volume = p[`${s}_Volume`];
+
+        // Line chart
+        if (chart) chart.destroy();
+        const ctx = document.getElementById("priceChart").getContext("2d");
+        chart = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: [data.date],
+            datasets: [
+              {
+                label: "Actual (Open)",
+                data: [open],
+                borderColor: "#007bff",
+                backgroundColor: "transparent",
+                borderWidth: 3,
+              },
+              {
+                label: "Predicted (Close)",
+                data: [close],
+                borderColor: "#28a745",
+                backgroundColor: "transparent",
+                borderDash: [6, 6],
+                borderWidth: 3,
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { position: "bottom" },
+              title: { display: true, text: `📈 Prediction for ${s}` }
+            }
+          }
+        });
+
+        // Pie chart
+        if (pie) pie.destroy();
+        const pieCtx = document.getElementById("pieChart").getContext("2d");
+        pie = new Chart(pieCtx, {
+          type: 'pie',
+          data: {
+            labels: ['Open', 'Close', 'High', 'Low'],
+            datasets: [{
+              data: [open, close, high, low],
+              backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545'],
+            }]
+          },
+          options: {
+            plugins: {
+              title: {
+                display: true,
+                text: "💹 Price Composition"
+              }
+            }
+          }
+        });
+
+        // Analysis section
+        document.getElementById("priceAnalysis").innerHTML = `
+          <h3>📋 Price Analysis</h3>
+          <p><strong>Date:</strong> ${data.date}</p>
+          <p><strong>Current Price (Open):</strong> $${open}</p>
+          <p><strong>Forecasted Close:</strong> $${close}</p>
+          <p><strong>High:</strong> $${high}</p>
+          <p><strong>Low:</strong> $${low}</p>
+          <p><strong>Volatility:</strong> ${vol}</p>
+          <p><strong>Volume:</strong> ${Math.round(volume).toLocaleString()}</p>
+        `;
+      })
+      .catch(err => {
+        document.getElementById("priceAnalysis").innerHTML =
+          `<p style="color:red;">Error: ${err.message}</p>`;
+      });
+    }
+  </script>
+
+</body>
+</html>

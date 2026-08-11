@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>User Profile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f7f9fc;
+      margin: 0;
+      padding: 40px;
+      color: #111;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .avatar {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background-color: #e0d7f7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      color: #6a0dad;
+    }
+
+    .user-info h2 {
+      margin: 0;
+    }
+
+    .card {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+    }
+
+    .card h3 {
+      margin-top: 0;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+      margin-top: 15px;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .info-item i {
+      font-size: 20px;
+      color: #9f63f1;
+    }
+
+    .progress-container {
+      margin: 10px 0;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .progress-bar {
+      background-color: #e0e0e0;
+      border-radius: 20px;
+      overflow: hidden;
+      height: 10px;
+    }
+
+    .progress-bar-fill {
+      height: 10px;
+      background-color: #4b2aad;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    button {
+      display: block;
+      margin: 25px auto 0;
+      padding: 12px 24px;
+      background-color: #6a0dad;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #4b2aad;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="avatar">
+        <i class="fas fa-user"></i>
+      </div>
+      <div class="user-info">
+        <h2><%= fullname %></h2>
+        <p><i class="fas fa-envelope"></i> <%= email %></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Basic Information</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <i class="fas fa-calendar-alt"></i>
+          <div><strong>Age:</strong> <%= age %> years</div>
+        </div>
+        <div class="info-item">
+          <i class="fas fa-venus-mars"></i>
+          <div><strong>Gender:</strong> <%= gender %></div>
+        </div>
+        <div class="info-item">
+          <i class="fas fa-graduation-cap"></i>
+          <div><strong>Education:</strong> <%= education_level %></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Financial Overview</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <i class="fas fa-dollar-sign"></i>
+          <div><strong>Annual Income:</strong> ₹<%= annual_income %></div>
+        </div>
+        <div class="info-item">
+          <i class="fas fa-wallet"></i>
+          <div><strong>Investment Amount:</strong> ₹<%= investment_amount %></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Investment Profile</h3>
+
+      <div class="progress-container">
+        <div class="progress-label">
+          <span><i class="fas fa-brain"></i> Financial Knowledge</span>
+          <span><%= financial_knowledge %>/10</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-bar-fill" style="width: <%= financial_knowledge * 10 %>%"></div>
+        </div>
+      </div>
+
+      <div class="progress-container">
+        <div class="progress-label">
+          <span><i class="fas fa-chart-line"></i> Risk Tolerance</span>
+          <span><%= risk_tolerance %>/10</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-bar-fill" style="width: <%= risk_tolerance * 10 %>%"></div>
+        </div>
+      </div>
+
+      <div class="info-item" style="margin-top: 16px;">
+        <i class="fas fa-hourglass-half"></i>
+        <div><strong>Investment Horizon:</strong> <%= investment_horizon %></div>
+      </div>
+    </div>
+
+    <form action="/update-info" method="GET">
+      <button type="submit">Update Info</button>
+    </form>
+  </div>
+</body>
+</html>

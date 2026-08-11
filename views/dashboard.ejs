@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Investment Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans p-6">
+  <div class="max-w-5xl mx-auto">
+    <h1 class="text-3xl font-bold text-blue-700 mb-6">📊 Welcome <%= fullname %></h1>
+
+    <div class="bg-white shadow-md rounded-2xl p-6 mb-6">
+      <h2 class="text-2xl font-semibold text-blue-600 mb-4">📈 Suggested Portfolio Allocation</h2>
+
+      <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Left side -->
+        <div class="flex-1">
+          <ul class="space-y-3 text-lg">
+            <li>📁 Stocks: <span class="font-semibold"><%= stocks %>%</span></li>
+            <li>💰 Bonds: <span class="font-semibold"><%= bonds %>%</span></li>
+            <li>🏆 Gold: <span class="font-semibold"><%= gold %>%</span></li>
+            <li>🏠 Real Estate: <span class="font-semibold"><%= real_estate %>%</span></li>
+          </ul>
+          <img src="<%= chart %>" alt="Portfolio Pie Chart" class="mt-6 rounded-xl shadow-md" />
+        </div>
+
+        <!-- Right side -->
+        <div class="flex-1">
+          <h3 class="text-xl font-semibold text-gray-700 mb-4">🔍 Asset Allocation Breakdown</h3>
+
+          <!-- Stocks -->
+          <div class="mb-6">
+            <div class="flex justify-between text-sm font-medium mb-1">
+              <span>Stocks</span>
+              <span><%= stocks %>%</span>
+            </div>
+            <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
+              <div class="bg-blue-600 h-full rounded-full transition-all duration-700" style="width: <%= stocks %>%"></div>
+            </div>
+            <p class="text-xs mt-1 text-gray-500">Mostly index funds and blue-chip stocks for growth potential</p>
+          </div>
+
+          <!-- Bonds -->
+          <div class="mb-6">
+            <div class="flex justify-between text-sm font-medium mb-1">
+              <span>Bonds</span>
+              <span><%= bonds %>%</span>
+            </div>
+            <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
+              <div class="bg-green-500 h-full rounded-full transition-all duration-700" style="width: <%= bonds %>%"></div>
+            </div>
+            <p class="text-xs mt-1 text-gray-500">Government and corporate bonds for stability and income</p>
+          </div>
+
+          <!-- Gold -->
+          <div class="mb-6">
+            <div class="flex justify-between text-sm font-medium mb-1">
+              <span>Gold</span>
+              <span><%= gold %>%</span>
+            </div>
+            <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
+              <div class="bg-yellow-500 h-full rounded-full transition-all duration-700" style="width: <%= gold %>%"></div>
+            </div>
+            <p class="text-xs mt-1 text-gray-500">Hedge against inflation and market volatility</p>
+          </div>
+
+          <!-- Real Estate -->
+          <div class="mb-6">
+            <div class="flex justify-between text-sm font-medium mb-1">
+              <span>Real Estate</span>
+              <span><%= real_estate %>%</span>
+            </div>
+            <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
+              <div class="bg-purple-500 h-full rounded-full transition-all duration-700" style="width: <%= real_estate %>%"></div>
+            </div>
+            <p class="text-xs mt-1 text-gray-500">REITs and real estate funds for diversification</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

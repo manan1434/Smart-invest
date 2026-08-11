@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>InvestAI Advisor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #f9fafb;
+      color: #1f2937;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: #fff;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
+    .logo::before {
+      content: "📈";
+      margin-right: 0.5rem;
+    }
+
+    .nav-buttons button {
+      margin-left: 1rem;
+      padding: 0.5rem 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .login {
+      background: #e5e7eb;
+    }
+
+    .signup {
+      background: #6366f1;
+      color: white;
+    }
+
+    main {
+      text-align: center;
+      padding: 4rem 1rem 2rem;
+    }
+
+    .icon {
+      font-size: 3rem;
+      background: #e0e7ff;
+      color: #4f46e5;
+      width: 60px;
+      height: 60px;
+      line-height: 60px;
+      margin: 0 auto 1rem;
+      border-radius: 50%;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+      color: #6b7280;
+      margin-bottom: 2rem;
+    }
+
+    .input-box {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 4rem;
+    }
+
+    .input-box input {
+      padding: 0.75rem 1rem;
+      width: 400px;
+      max-width: 90%;
+      border: 1px solid #d1d5db;
+      border-radius: 6px 0 0 6px;
+      font-size: 1rem;
+    }
+
+    .input-box button {
+      background: #6366f1;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.25rem;
+      border-radius: 0 6px 6px 0;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .features, .market-trends {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      margin: 2rem auto;
+      max-width: 1000px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      width: 280px;
+      text-align: left;
+    }
+
+    .card-icon {
+      font-size: 2rem;
+      background: #e0e7ff;
+      color: #4f46e5;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      margin-bottom: 1rem;
+    }
+
+    .card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .trend-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      width: 180px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .trend-positive {
+      color: green;
+    }
+
+    .trend-negative {
+      color: red;
+    }
+
+    .trend-icon {
+      font-size: 1rem;
+      background: #d1fae5;
+      color: green;
+      padding: 0.2rem 0.5rem;
+      border-radius: 50%;
+      margin-left: 0.5rem;
+    }
+
+    .trend-icon.down {
+      background: #fee2e2;
+      color: red;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: #f3f4f6;
+      color: #6b7280;
+      margin-top: 4rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">InvestAI</div>
+    <div class="nav-buttons">
+        <form action="/login" method="get" style="display:inline;">
+          <button type="submit" class="login">Login</button>
+        </form>
+        <form action="/signup" method="get" style="display:inline;">
+          <button type="submit" class="signup">Signup</button>
+        </form>
+      </div>
+      
+  </header>
+
+  <main>
+    <div class="icon">📈</div>
+    <h1>InvestAI Advisor</h1>
+    <p>Leverage the power of artificial intelligence to discover personalized investment<br> opportunities tailored to your financial goals.</p>
+ 
+
+    <h2>How InvestAI Works For You</h2>
+    <div class="features">
+      <div class="card">
+        <div class="card-icon">🧠</div>
+        <h3>Market Analysis</h3>
+        <p>Our AI continuously analyzes market trends, news, and economic indicators to identify potential opportunities.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">⚠️</div>
+        <h3>Custom Recommendations</h3>
+        <p>Get personalized investment ideas based on your queries, risk tolerance, and financial goals.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📈</div>
+        <h3>Growth Strategies</h3>
+        <p>Discover strategies for long-term wealth building through diversification and data-driven insights.</p>
+      </div>
+    </div>
+
+    <h2>Current Market Trends</h2>
+    <div class="market-trends">
+      <div class="trend-card">
+        <strong>Technology</strong><br>
+        <span class="trend-positive">+2.4%</span>
+        <span class="trend-icon">↑</span>
+      </div>
+      <div class="trend-card">
+        <strong>Healthcare</strong><br>
+        <span class="trend-positive">+1.7%</span>
+        <span class="trend-icon">↑</span>
+      </div>
+      <div class="trend-card">
+        <strong>Finance</strong><br>
+        <span class="trend-negative">-0.8%</span>
+        <span class="trend-icon down">↓</span>
+      </div>
+      <div class="trend-card">
+        <strong>Energy</strong><br>
+        <span class="trend-positive">+3.2%</span>
+        <span class="trend-icon">↑</span>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 InvestAI. All rights reserved.
+  </footer>
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Real Estate ROI Predictor</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 40px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    p {
+      text-align: center;
+      font-size: 1.1rem;
+      color: #555;
+      margin-bottom: 30px;
+    }
+    .input-group {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    input[type="number"] {
+      padding: 10px;
+      font-size: 16px;
+      width: 250px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #1e3a8a;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    button:hover {
+      background-color: #1d4ed8;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+    th {
+      background-color: #1e3a8a;
+      color: white;
+    }
+    .charts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 20px;
+      margin-top: 40px;
+    }
+    .chart-container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🏡 Real Estate ROI Predictor</h1>
+    <p>Calculate your potential returns on real estate investments</p>
+
+    <div class="input-group">
+      <input type="number" id="investment" placeholder="Enter amount in ₹" />
+      <button onclick="getPredictions()">Predict ROI</button>
+    </div>
+
+    <table id="resultsTable" style="display: none;">
+      <thead>
+        <tr>
+          <th>City</th>
+          <th>Type</th>
+          <th>BHK</th>
+          <th>Size (sqft)</th>
+          <th>Total Price</th>
+          <th>Ownership %</th>
+          <th>ROI (10 Yr)</th>
+          <th>Total Return (L)</th>
+          <th>Rental Income (L)</th>
+          <th>Total ROI (L)</th>
+        </tr>
+      </thead>
+      <tbody id="resultsBody"></tbody>
+    </table>
+
+    <div class="charts" id="chartSection" style="display:none;">
+      <div class="chart-container"><canvas id="roiByTypeChart"></canvas></div>
+      <div class="chart-container"><canvas id="cityDistChart"></canvas></div>
+      <div class="chart-container"><canvas id="sizeVsROIChart"></canvas></div>
+      <div class="chart-container"><canvas id="roiPriceRangeChart"></canvas></div>
+      <div class="chart-container"><canvas id="investmentCompChart"></canvas></div>
+    </div>
+  </div>
+
+  <script>
+    let charts = [];
+
+    function destroyCharts() {
+      charts.forEach(c => c.destroy());
+      charts = [];
+    }
+
+    async function getPredictions() {
+      const investment = document.getElementById("investment").value;
+      if (!investment) return alert("Please enter an investment amount.");
+
+      try {
+        const response = await fetch("http://localhost:5000/predict_properties", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ investment_amount: parseFloat(investment) })
+        });
+
+        const data = await response.json();
+        const resultsTable = document.getElementById("resultsTable");
+        const resultsBody = document.getElementById("resultsBody");
+
+        resultsBody.innerHTML = "";
+        destroyCharts();
+
+        if (Array.isArray(data)) {
+          const cityCount = {};
+          const roiByType = {};
+          const sizeData = [];
+          const priceRange = {};
+          const labels = [];
+          const returns = [];
+          const rents = [];
+
+          data.forEach(row => {
+            // Populate table
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${row.city}</td>
+              <td>${row.property_type}</td>
+              <td>${row.bhk}</td>
+              <td>${row.size_sqft}</td>
+              <td>₹${row.total_price.toLocaleString()}</td>
+              <td>${(row.user_ownership_percent * 100).toFixed(1)}%</td>
+              <td>${(row.predicted_roi_year_10 * 100).toFixed(2)}%</td>
+              <td>${row.total_return}L</td>
+              <td>${row.total_rental_income}L</td>
+              <td>${row.total_roi}L</td>
+            `;
+            resultsBody.appendChild(tr);
+
+            // Charts Data
+            roiByType[row.property_type] = roiByType[row.property_type] || [];
+            roiByType[row.property_type].push(row.predicted_roi_year_10 * 100);
+
+            cityCount[row.city] = (cityCount[row.city] || 0) + 1;
+
+            sizeData.push({ x: row.size_sqft, y: row.predicted_roi_year_10 * 100 });
+
+            priceRange[row.total_price] = row.predicted_roi_year_10 * 100;
+
+            labels.push(`${row.property_type}`);
+            returns.push(row.total_return);
+            rents.push(row.total_rental_income);
+          });
+
+          resultsTable.style.display = "table";
+          document.getElementById("chartSection").style.display = "grid";
+
+          // Chart 1: ROI by Property Type
+          const roiLabels = Object.keys(roiByType);
+          const roiData = roiLabels.map(t => roiByType[t].reduce((a,b) => a + b, 0) / roiByType[t].length);
+          charts.push(new Chart("roiByTypeChart", {
+            type: "bar",
+            data: {
+              labels: roiLabels,
+              datasets: [{
+                label: "Average ROI (%)",
+                data: roiData,
+                backgroundColor: "#818cf8"
+              }]
+            }
+          }));
+
+          // Chart 2: City Distribution
+          const cityLabels = Object.keys(cityCount);
+          const cityValues = cityLabels.map(c => cityCount[c]);
+          charts.push(new Chart("cityDistChart", {
+            type: "pie",
+            data: {
+              labels: cityLabels,
+              datasets: [{
+                data: cityValues,
+                backgroundColor: ["#93c5fd", "#c4b5fd", "#fcd34d"]
+              }]
+            }
+          }));
+
+          // Chart 3: Size vs ROI
+          charts.push(new Chart("sizeVsROIChart", {
+            type: "scatter",
+            data: {
+              datasets: [{
+                label: "ROI vs Size",
+                data: sizeData,
+                backgroundColor: "#60a5fa"
+              }]
+            },
+            options: {
+              scales: {
+                x: { title: { display: true, text: 'Size (sqft)' } },
+                y: { title: { display: true, text: 'ROI (%)' } }
+              }
+            }
+          }));
+
+          // Chart 4: ROI Trend by Price Range
+          const priceLabels = Object.keys(priceRange).map(p => `₹${(p/100000).toFixed(1)}M`);
+          const priceROI = Object.values(priceRange);
+          charts.push(new Chart("roiPriceRangeChart", {
+            type: "line",
+            data: {
+              labels: priceLabels,
+              datasets: [{
+                label: "Average ROI",
+                data: priceROI,
+                fill: true,
+                borderColor: "#7c3aed",
+                backgroundColor: "rgba(124,58,237,0.1)"
+              }]
+            }
+          }));
+
+          // Chart 5: Investment Return Comparison
+          charts.push(new Chart("investmentCompChart", {
+            type: "bar",
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: "Total Return (L)",
+                  data: returns,
+                  backgroundColor: "#a78bfa"
+                },
+                {
+                  label: "Rental Income (L)",
+                  data: rents,
+                  backgroundColor: "#818cf8"
+                }
+              ]
+            }
+          }));
+        } else {
+          alert("Error fetching results: " + (data.error || "Unknown error"));
+        }
+      } catch (err) {
+        console.error(err);
+        alert("An error occurred while fetching predictions.");
+      }
+    }
+  </script>
+</body>
+</html>

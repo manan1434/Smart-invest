@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SmartInvest - Investment Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+  <!-- Top Nav -->
+  <header class="bg-white shadow p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-blue-800">SmartInvest</h1>
+    <nav class="space-x-6">
+      <a href="index.html" class="text-gray-700 hover:text-blue-600">Home</a>
+      <a href="/dashboard" class="text-gray-700 hover:text-blue-600">Dashboard</a>
+      <a href="stocks.html" class="text-gray-700 hover:text-blue-600">Stocks</a>
+      <a href="Realestate.html" class="text-gray-700 hover:text-blue-600">Real Estate ROI Predictor</a>
+      <a href="gold.html" class="text-gray-700 hover:text-blue-600">Gold</a>
+    </nav>
+    <a href="/profile" class="flex items-center gap-2 border px-4 py-2 rounded hover:bg-gray-100">
+      <span>Profile</span>
+    </a>
+  </header>
+
+  <div class="flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white h-screen p-4 shadow">
+      <h2 class="text-lg font-semibold mb-4">Navigation</h2>
+      <ul class="space-y-4">
+        <li><a href="/dashboard" class="flex items-center gap-2 text-gray-700 hover:text-blue-600"><span>🏠</span> Dashboard</a></li>
+        <li><a href="/profile" class="flex items-center gap-2 text-gray-700 hover:text-blue-600"><span>💼</span> Update Your Personal in formation</a></li>
+        <li><a href="stocks.html" class="flex items-center gap-2 text-gray-700 hover:text-blue-600"><span>📈</span> Stock Predictions</a></li>
+        <li><a href="Realestate.html" class="flex items-center gap-2 text-gray-700 hover:text-blue-600"><span>📊</span> Real Estate ROI Predictor</a></li>
+        <li><a href="gold.html" class="flex items-center gap-2 text-gray-700 hover:text-blue-600"><span>💰</span> Gold Predictions</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8 space-y-10">
+      <!-- Welcome Card -->
+      <section class="bg-white p-8 rounded-2xl shadow-lg grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <div>
+          <h2 class="text-3xl font-bold text-blue-800 mb-4">Welcome to SmartInvest 👋</h2>
+          <p class="text-gray-700 mb-4">
+            Take control of your financial future. SmartInvest provides smart tools to help you grow your wealth across
+            <span class="font-semibold text-blue-700">stocks</span>,
+            <span class="font-semibold text-blue-700">real estate</span>,
+            <span class="font-semibold text-blue-700">gold</span>, and more.
+          </p>
+          <ul class="list-disc list-inside text-gray-600 space-y-2">
+            <li>Its just like your personal investment guide. 📊</li>
+            <li>Get AI-driven investment predictions 🤖</li>
+            <li>Diversify with confidence across multiple assets 💼</li>
+          </ul>
+          <a href="/dashboard" class="inline-block mt-6 bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition">
+            Explore Dashboard
+          </a>
+        </div>
+        <div>
+          <img src="images/investment_type.jpg" alt="Investment hero" class="rounded-xl shadow-md">
+        </div>
+      </section>
+
+      <!-- Feature Cards -->
+      <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Stock Predictions -->
+        <div class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition duration-300">
+          <h3 class="text-xl font-bold text-blue-700 mb-3">📈 Stock Predictions</h3>
+          <p class="text-gray-600 mb-4">View AI-driven forecasts for top-performing stocks based on real-time data.</p>
+          <a href="stocks.html" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">View Predictions</a>
+        </div>
+
+        <!-- Real Estate ROI -->
+        <div class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition duration-300">
+          <h3 class="text-xl font-bold text-green-700 mb-3">🏠 Real Estate ROI</h3>
+          <p class="text-gray-600 mb-4">Analyze potential ROI before investing in real estate projects using smart tools.</p>
+          <a href="Realestate.html" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Calculate ROI</a>
+        </div>
+
+        <!-- Gold Investment Insights -->
+        <div class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition duration-300">
+          <h3 class="text-xl font-bold text-yellow-700 mb-3">💰 Gold Insights</h3>
+          <p class="text-gray-600 mb-4">Track gold price trends and predictions to diversify your portfolio safely.</p>
+          <a href="gold.html" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Explore Insights</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+</body>
+</html>
